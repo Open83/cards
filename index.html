@@ -1,361 +1,439 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Reasons Why I Love You ❤️</title>
-    <style>
-        :root {
-            --bg-color: #fff8f8;
-            --primary-accent: #ff5c8a;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Reasons Why I Love You ❤️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#fff8f8;
+    --accent:#ff5c8a;
+    --accent-dark:#e8487a;
+    --accent-tint:#ffe6ec;
+    --card-bg:#ffffff;
+    --text:#333333;
+    --text-soft:#9a9a9a;
+    --shadow:0 10px 30px rgba(0,0,0,0.08);
+    --shadow-strong:0 18px 40px rgba(255,92,138,0.25);
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    overflow-x:hidden;
+    min-height:100vh;
+    min-height:100dvh;
+    position:relative;
+    -webkit-tap-highlight-color:transparent;
+  }
 
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-main);
-            overflow: hidden; /* Prevents scrolling and locks layout */
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
+  /* ---------- floating background hearts (CSS only) ---------- */
+  .hearts-bg{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+  .heart{
+    position:absolute;
+    bottom:-10%;
+    left:var(--left);
+    width:var(--size);
+    height:var(--size);
+    background:var(--accent);
+    transform:rotate(-45deg);
+    opacity:0;
+    animation:floatHeart var(--duration) linear infinite;
+    animation-delay:var(--delay);
+  }
+  .heart::before,.heart::after{
+    content:'';
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:inherit;
+    border-radius:50%;
+  }
+  .heart::before{top:calc(var(--size) / -2);left:0;}
+  .heart::after{top:0;left:calc(var(--size) / 2);}
 
-        /* --- Background Floating Hearts --- */
-        #hearts-container {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
+  @keyframes floatHeart{
+    0%{transform:translateY(0) rotate(-45deg) scale(.7);opacity:0;}
+    8%{opacity:.22;}
+    50%{opacity:.3;}
+    92%{opacity:.12;}
+    100%{transform:translateY(-115vh) rotate(-25deg) scale(1.05);opacity:0;}
+  }
 
-        .heart {
-            position: absolute;
-            bottom: -10vh;
-            font-size: 1.5rem;
-            color: var(--primary-accent);
-            opacity: 0;
-            animation: floatUp linear infinite;
-            user-select: none;
-        }
+  /* ---------- screens ---------- */
+  .screen{
+    display:none;
+    position:relative;
+    z-index:1;
+    width:100%;
+    min-height:100vh;
+    min-height:100dvh;
+    align-items:center;
+    justify-content:center;
+    padding:max(28px, env(safe-area-inset-top)) 20px max(28px, env(safe-area-inset-bottom));
+  }
+  .screen.active{
+    display:flex;
+    animation:screenIn .7s var(--ease);
+  }
+  .screen.fade-out{
+    animation:screenOut .35s ease forwards;
+  }
+  @keyframes screenIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes screenOut{from{opacity:1;transform:translateY(0);}to{opacity:0;transform:translateY(-12px);}}
 
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(0.8) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.15; }
-            80% { opacity: 0.15; }
-            100% { transform: translateY(-110vh) scale(1.2) rotate(45deg); opacity: 0; }
-        }
+  .welcome-content,.final-content{
+    text-align:center;
+    max-width:460px;
+    width:100%;
+  }
 
-        /* --- Screen Layouts --- */
-        .screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.6s ease;
-            z-index: 10;
-            padding: 20px;
-        }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:.75rem;
+    font-weight:600;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--accent-dark);
+    background:var(--accent-tint);
+    padding:6px 14px;
+    border-radius:999px;
+    margin-bottom:22px;
+  }
 
-        .screen.active {
-            display: flex;
-        }
+  h1.welcome-title{
+    font-size:clamp(1.6rem, 5.2vw, 2.5rem);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    line-height:1.25;
+    margin:0 0 14px;
+  }
 
-        h2 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--text-color);
-        }
+  .welcome-sub, .final-sub{
+    font-size:clamp(1rem, 2.6vw, 1.15rem);
+    color:var(--text-soft);
+    line-height:1.7;
+    margin:0 0 34px;
+    font-weight:500;
+  }
 
-        p {
-            font-size: 1.1rem;
-            color: #666666;
-            margin-bottom: 30px;
-        }
+  .final-message{
+    font-size:clamp(1.15rem, 3.4vw, 1.5rem);
+    font-weight:600;
+    line-height:1.7;
+    margin:0 0 36px;
+  }
 
-        /* --- UI Elements --- */
-        button {
-            background-color: var(--primary-accent);
-            color: #ffffff;
-            border: none;
-            border-radius: 50px;
-            padding: 16px 36px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255, 92, 138, 0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-        }
+  .btn{
+    font-family:inherit;
+    font-weight:600;
+    font-size:1rem;
+    color:#fff;
+    background:var(--accent);
+    border:none;
+    border-radius:999px;
+    padding:15px 38px;
+    min-height:50px;
+    cursor:pointer;
+    box-shadow:var(--shadow-strong);
+    transition:transform .25s var(--ease), box-shadow .25s ease, background .25s ease;
+  }
+  .btn:hover{transform:translateY(-3px);background:var(--accent-dark);box-shadow:0 22px 44px rgba(255,92,138,.32);}
+  .btn:active{transform:translateY(0) scale(.95);box-shadow:0 8px 18px rgba(255,92,138,.28);}
 
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(255, 92, 138, 0.4);
-        }
+  /* ---------- cards screen ---------- */
+  .progress-indicator{
+    position:absolute;
+    top:max(22px, env(safe-area-inset-top));
+    left:50%;
+    transform:translateX(-50%);
+    background:var(--card-bg);
+    color:var(--accent-dark);
+    font-weight:700;
+    font-size:.82rem;
+    letter-spacing:.03em;
+    padding:9px 20px;
+    border-radius:999px;
+    box-shadow:var(--shadow);
+    z-index:5;
+  }
 
-        button:active {
-            transform: translateY(2px) scale(0.97);
-            box-shadow: 0 4px 10px rgba(255, 92, 138, 0.3);
-        }
+  .cards-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:30px;
+    width:100%;
+    margin-top:30px;
+  }
 
-        #progress {
-            position: absolute;
-            top: 5vh;
-            right: 5vw;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-accent);
-            background: rgba(255, 92, 138, 0.1);
-            padding: 8px 18px;
-            border-radius: 20px;
-        }
+  .card-stack{
+    position:relative;
+    width:min(90vw, 380px);
+    height:clamp(290px, 46vh, 380px);
+  }
 
-        /* --- Card Animation System --- */
-        #card-container {
-            position: relative;
-            width: 100%;
-            max-width: 360px;
-            height: 280px;
-            margin-bottom: 30px;
-        }
+  .card{
+    position:absolute;
+    inset:0;
+    background:var(--card-bg);
+    border-radius:26px;
+    box-shadow:var(--shadow);
+    padding:clamp(26px, 6vw, 42px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    transition:transform .6s var(--ease), opacity .6s ease;
+    will-change:transform, opacity;
+  }
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 40px 30px;
-            box-shadow: var(--shadow);
-            width: 100%;
-            position: absolute;
-            top: 50%; left: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* 60fps hardware accelerated animations */
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
-            will-change: transform, opacity;
-        }
+  .card-heart{
+    width:22px;
+    height:22px;
+    position:relative;
+    transform:rotate(-45deg);
+    background:var(--accent);
+    margin-bottom:20px;
+    flex-shrink:0;
+    opacity:.9;
+  }
+  .card-heart::before,.card-heart::after{
+    content:'';
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:inherit;
+    border-radius:50%;
+  }
+  .card-heart::before{top:-11px;left:0;}
+  .card-heart::after{top:0;left:11px;}
 
-        #card-text {
-            font-size: 1.3rem;
-            line-height: 1.6;
-            margin: 0;
-            font-weight: 500;
-            color: var(--text-color);
-        }
+  .card-text{
+    font-size:clamp(1.05rem, 3.6vw, 1.32rem);
+    font-weight:500;
+    line-height:1.65;
+    margin:0;
+    color:var(--text);
+  }
 
-        /* Card States */
-        .card.active {
-            transform: translate(-50%, -50%) rotate(0deg) scale(1);
-            opacity: 1;
-            z-index: 2;
-        }
+  .card.pos-front{transform:translateY(0) translateX(0) scale(1) rotate(0deg);opacity:1;z-index:5;cursor:pointer;}
+  .card.pos-1{transform:translateY(16px) scale(.94) rotate(-3deg);opacity:.7;z-index:4;pointer-events:none;}
+  .card.pos-2{transform:translateY(30px) scale(.88) rotate(3deg);opacity:.45;z-index:3;pointer-events:none;}
+  .card.pos-hidden{transform:translateY(30px) scale(.82) rotate(3deg);opacity:0;z-index:1;pointer-events:none;}
+  .card.pos-exited{transform:translateY(-58px) translateX(34px) scale(.92) rotate(-9deg);opacity:0;z-index:6;pointer-events:none;}
 
-        .card.out {
-            transform: translate(-50%, -80%) rotate(5deg) scale(0.95);
-            opacity: 0;
-            z-index: 2;
-        }
+  .controls{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+  }
 
-        .card.in {
-            transform: translate(-50%, -20%) rotate(-5deg) scale(0.9);
-            opacity: 0;
-            transition: none; /* Instantly snap to start position */
-            z-index: 1;
-        }
+  .next-btn{
+    width:54px;
+    height:54px;
+    border-radius:50%;
+    border:none;
+    background:var(--card-bg);
+    color:var(--accent);
+    font-size:1.4rem;
+    box-shadow:var(--shadow);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform .25s var(--ease), box-shadow .25s ease, color .25s ease, background .25s ease;
+  }
+  .next-btn:hover{background:var(--accent);color:#fff;transform:translateY(-3px);}
+  .next-btn:active{transform:scale(.92);}
 
-        /* --- Responsive Tweaks --- */
-        @media (max-width: 400px) {
-            #card-container {
-                height: 250px;
-            }
-            .card {
-                padding: 30px 20px;
-            }
-            #card-text {
-                font-size: 1.15rem;
-            }
-            h2 {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+  .hint{
+    font-size:.8rem;
+    color:var(--text-soft);
+    font-weight:500;
+  }
+
+  /* ---------- responsive tweaks ---------- */
+  @media (max-width:360px){
+    .card{padding:22px;}
+    .card-text{font-size:1rem;}
+  }
+
+  @media (min-width:900px){
+    .card-stack{width:420px;height:380px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+    .heart{display:none;}
+  }
+</style>
 </head>
 <body>
 
-    <div id="hearts-container"></div>
+  <div class="hearts-bg" aria-hidden="true">
+    <span class="heart" style="--left:4%;  --size:14px; --duration:16s; --delay:-2s;"></span>
+    <span class="heart" style="--left:14%; --size:10px; --duration:13s; --delay:-7s;"></span>
+    <span class="heart" style="--left:24%; --size:18px; --duration:19s; --delay:-4s;"></span>
+    <span class="heart" style="--left:36%; --size:12px; --duration:15s; --delay:-9s;"></span>
+    <span class="heart" style="--left:48%; --size:16px; --duration:21s; --delay:-1s;"></span>
+    <span class="heart" style="--left:60%; --size:11px; --duration:14s; --delay:-6s;"></span>
+    <span class="heart" style="--left:72%; --size:20px; --duration:23s; --delay:-11s;"></span>
+    <span class="heart" style="--left:82%; --size:13px; --duration:17s; --delay:-3s;"></span>
+    <span class="heart" style="--left:90%; --size:15px; --duration:18s; --delay:-8s;"></span>
+    <span class="heart" style="--left:96%; --size:9px;  --duration:12s; --delay:-5s;"></span>
+  </div>
 
-    <section id="welcome-screen" class="screen active">
-        <h2>For Someone Very Special ❤️</h2>
-        <p>I made this little thing just for you.</p>
-        <button id="start-btn">Start</button>
-    </section>
+  <!-- Welcome Screen -->
+  <section id="welcomeScreen" class="screen active">
+    <div class="welcome-content">
+      <span class="eyebrow">For You</span>
+      <h1 class="welcome-title">For Someone Very Special ❤️</h1>
+      <p class="welcome-sub">I made this little thing just for you.</p>
+      <button id="startBtn" class="btn">Start ❤️</button>
+    </div>
+  </section>
 
-    <section id="main-screen" class="screen">
-        <div id="progress">1 / 10</div>
-        
-        <div id="card-container">
-            <div id="card" class="card active">
-                <p id="card-text"></p>
-            </div>
-        </div>
-        
-        <button id="next-btn">Next ❤️</button>
-    </section>
+  <!-- Cards Screen -->
+  <section id="cardsScreen" class="screen">
+    <div class="progress-indicator" id="progressIndicator" aria-live="polite">1 / 10</div>
+    <div class="cards-wrap">
+      <div class="card-stack" id="cardStack"></div>
+      <div class="controls">
+        <button id="nextBtn" class="next-btn" aria-label="Next reason">→</button>
+        <span class="hint">Tap the card or arrow to continue</span>
+      </div>
+    </div>
+  </section>
 
-    <section id="end-screen" class="screen">
-        <h2>And these are only a few reasons...</h2>
-        <p>I'd need a lifetime to tell you the rest. ❤️</p>
-        <button id="shuffle-btn">Shuffle Again ❤️</button>
-    </section>
+  <!-- Final Screen -->
+  <section id="finalScreen" class="screen">
+    <div class="final-content">
+      <p class="final-message">And these are only a few reasons...<br>I'd need a lifetime to tell you the rest. ❤️</p>
+      <button id="shuffleBtn" class="btn">Shuffle Again ❤️</button>
+    </div>
+  </section>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            // DOM Elements
-            const welcomeScreen = document.getElementById("welcome-screen");
-            const mainScreen = document.getElementById("main-screen");
-            const endScreen = document.getElementById("end-screen");
+<script>
+(function(){
+  "use strict";
 
-            const startBtn = document.getElementById("start-btn");
-            const nextBtn = document.getElementById("next-btn");
-            const shuffleBtn = document.getElementById("shuffle-btn");
+  const reasons = [
+    "You make ordinary days feel like little adventures.",
+    "Your laugh is my favorite sound in the world.",
+    "You listen, really listen, even when I'm rambling about nothing.",
+    "You remember the small things that matter most to me.",
+    "You make me want to be a better person, just by being yourself.",
+    "Your hugs feel like home, no matter where we are.",
+    "You believe in me on the days I don't believe in myself.",
+    "You find joy in the little things, and somehow that joy is contagious.",
+    "Even on hard days, you choose us, over and over again.",
+    "You love me exactly as I am, and that has changed everything."
+  ];
 
-            const card = document.getElementById("card");
-            const cardText = document.getElementById("card-text");
-            const progress = document.getElementById("progress");
-            const heartsContainer = document.getElementById("hearts-container");
+  let order = reasons.map((_, i) => i);
+  let currentIndex = 0;
 
-            // Reasons Array
-            const originalReasons = [
-                "Your smile brightens even my darkest days.",
-                "The way you care so deeply for the people you love.",
-                "Your incredible sense of humor that always makes me laugh.",
-                "How you support my dreams and push me to be better.",
-                "The gentle way you hold my hand when we walk.",
-                "Your passion and drive for the things you believe in.",
-                "The comforting sound of your voice when we talk for hours.",
-                "How you remember the little details about me.",
-                "The way you look at me like I'm the only person in the room.",
-                "Simply because you are you, and that is more than enough."
-            ];
+  const welcomeScreen = document.getElementById('welcomeScreen');
+  const cardsScreen = document.getElementById('cardsScreen');
+  const finalScreen = document.getElementById('finalScreen');
+  const startBtn = document.getElementById('startBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const cardStack = document.getElementById('cardStack');
+  const progressIndicator = document.getElementById('progressIndicator');
 
-            // State
-            let currentReasons = [...originalReasons];
-            let currentIndex = 0;
+  // Build the 10 persistent card elements once.
+  const cardEls = order.map(() => {
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.innerHTML = '<span class="card-heart" aria-hidden="true"></span><p class="card-text"></p>';
+    cardStack.appendChild(el);
+    return el;
+  });
 
-            // Generate CSS-only Floating Hearts
-            function initHearts() {
-                for (let i = 0; i < 20; i++) {
-                    let heart = document.createElement("div");
-                    heart.innerHTML = "❤️";
-                    heart.className = "heart";
-                    heart.style.left = Math.random() * 100 + "vw";
-                    heart.style.animationDelay = Math.random() * 5 + "s";
-                    heart.style.animationDuration = 8 + Math.random() * 10 + "s";
-                    heartsContainer.appendChild(heart);
-                }
-            }
+  function render(){
+    cardEls.forEach((el, pos) => {
+      const reasonIndex = order[pos];
+      el.querySelector('.card-text').textContent = reasons[reasonIndex];
 
-            // Smooth Screen Transitions
-            function switchScreen(hideScreen, showScreen) {
-                hideScreen.style.opacity = "0";
-                setTimeout(() => {
-                    hideScreen.classList.remove("active");
-                    showScreen.classList.add("active");
-                    
-                    // RequestAnimationFrame ensures display:flex is painted before opacity transition
-                    requestAnimationFrame(() => {
-                        requestAnimationFrame(() => {
-                            showScreen.style.opacity = "1";
-                        });
-                    });
-                }, 600); // Matches CSS transition duration
-            }
+      const distance = pos - currentIndex;
+      el.classList.remove('pos-front','pos-1','pos-2','pos-hidden','pos-exited');
 
-            // Render text and progress marker
-            function renderCard(index) {
-                cardText.textContent = currentReasons[index];
-                progress.textContent = `${index + 1} / ${currentReasons.length}`;
-            }
+      if (distance === 0) el.classList.add('pos-front');
+      else if (distance === 1) el.classList.add('pos-1');
+      else if (distance === 2) el.classList.add('pos-2');
+      else if (distance < 0) el.classList.add('pos-exited');
+      else el.classList.add('pos-hidden');
+    });
 
-            // True Random Shuffle (Fisher-Yates Algorithm)
-            function shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [array[i], array[j]] = [array[j], array[i]];
-                }
-            }
+    progressIndicator.textContent = (currentIndex + 1) + ' / ' + reasons.length;
+  }
 
-            // Event Listeners
-            startBtn.addEventListener("click", () => {
-                renderCard(currentIndex);
-                switchScreen(welcomeScreen, mainScreen);
-            });
+  function nextCard(){
+    if (currentIndex < reasons.length - 1){
+      currentIndex++;
+      render();
+    } else {
+      switchScreen(cardsScreen, finalScreen);
+    }
+  }
 
-            nextBtn.addEventListener("click", () => {
-                // Prevent rapid double clicks from breaking animation sequence
-                nextBtn.style.pointerEvents = "none";
+  function shuffleOrder(arr){
+    for (let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
 
-                // Trigger exit animation
-                card.classList.remove("active");
-                card.classList.add("out");
+  function switchScreen(fromEl, toEl){
+    fromEl.classList.add('fade-out');
+    setTimeout(() => {
+      fromEl.classList.remove('active','fade-out');
+      toEl.classList.add('active');
+    }, 350);
+  }
 
-                setTimeout(() => {
-                    currentIndex++;
+  startBtn.addEventListener('click', () => {
+    switchScreen(welcomeScreen, cardsScreen);
+  });
 
-                    if (currentIndex >= currentReasons.length) {
-                        switchScreen(mainScreen, endScreen);
-                        nextBtn.style.pointerEvents = "auto";
-                    } else {
-                        // Reset card to "in" position instantly
-                        card.classList.remove("out");
-                        card.classList.add("in");
-                        renderCard(currentIndex);
+  nextBtn.addEventListener('click', nextCard);
 
-                        // Trigger enter animation
-                        requestAnimationFrame(() => {
-                            requestAnimationFrame(() => {
-                                card.classList.remove("in");
-                                card.classList.add("active");
-                                nextBtn.style.pointerEvents = "auto";
-                            });
-                        });
-                    }
-                }, 600);
-            });
+  cardStack.addEventListener('click', (e) => {
+    if (e.target.closest('.pos-front')) nextCard();
+  });
 
-            shuffleBtn.addEventListener("click", () => {
-                shuffleArray(currentReasons);
-                currentIndex = 0;
-                renderCard(currentIndex);
-                
-                // Reset card position before showing main screen again
-                card.classList.remove("out", "in");
-                card.classList.add("active");
-                
-                switchScreen(endScreen, mainScreen);
-            });
+  shuffleBtn.addEventListener('click', () => {
+    shuffleOrder(order);
+    currentIndex = 0;
+    render();
+    switchScreen(finalScreen, cardsScreen);
+  });
 
-            // Initialize app
-            initHearts();
-            welcomeScreen.style.opacity = "1";
-        });
-    </script>
+  document.addEventListener('keydown', (e) => {
+    if (!cardsScreen.classList.contains('active')) return;
+    if (e.key === 'ArrowRight' || e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      nextCard();
+    }
+  });
+
+  render();
+})();
+</script>
+
 </body>
 </html>
